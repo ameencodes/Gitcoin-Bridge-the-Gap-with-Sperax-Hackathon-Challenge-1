@@ -4,7 +4,8 @@ This results in a nested for loop . The first for loop one line 499 for (uint y 
 This loops over the length of all the collateral assets in the contract. 
 However , on line 501 a for loop is inserted in the previous for loop for (uint i = 0; i < allStrategies.length; i++)  .  
 This for loop on line 501 goes through all the strategies and calculates if they’ve made a profit and withdraws from the  strategies if they have made a profit . However , the  critical  issue here is that the amount of  strategies has to be equal or less than the amount collaterals in the contract .
-Say for instance allCollat.length = 5 and   allStrategies.length= 7 . This means that once is on 5th index  a‘ allCollat[4;]’ the for loop ends and therefore the rest of the strategies will not be computed .
+Say for instance allCollat.length = 5 and   allStrategies.length= 7 . 
+This means that once is on 5th index  a‘ allCollat[4;]’ the for loop ends and therefore the rest of the strategies will not be computed .
 
 
 code fix to bug 
