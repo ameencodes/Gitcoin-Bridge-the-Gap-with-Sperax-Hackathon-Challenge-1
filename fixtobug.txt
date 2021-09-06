@@ -9,38 +9,4 @@ This means that once is on 5th index  a‘ allCollat[4;]’ the for loop ends an
 
 
 code fix to bug 
-
-function _rebase() internal {
-  address _strategyAddr;
-  IStrategy strategy;
-  address collaAddr;
-  uint allocatedAmt;
-  uint newTokensAmt;
-  uint USDsSupplyIncrement;
-  uint USDsSupplyIncrementTotal;
-  address[] memory FixallCollat = new address[];
-
-  for (uint y = 0; y < allCollat.length; y++) {
-    FixallCollat[i]= = allCollat[i];
-  } 
-  //end of for loop for allcollat
-// start of for loop for allStrategies
-  for (uint i = 0; i <allStrategies.length; i++) {
-    collaAddr =   FixallCollat[i];
-    _strategyAddr = allStrategies[i];
-      strategy = IStrategy(_strategyAddr);
-      allocatedAmt = strategiesAllocatedAmt[collaAddr][_strategyAddr] ;
-      (, newTokensAmt) = strategy.checkBalance(collaAddr).trySub(allocatedAmt);
-      if (newTokensAmt > 0) {
-        strategy.withdraw(address(this), collaAddr, newTokensAmt);
-        (uint SPABurnAmt, uint collaDepAmt, uint USDsAmt, uint swapFeeAmount) = mintView(collaAddr, newTokensAmt, 2);
-        strategy.withdraw(address(this), collaAddr, collaDepAmt);
-        ISperaxToken(SPATokenAddr).burnFrom(SPAValut, SPABurnAmt);
-        USDsSupplyIncrement = USDsInstance._totalSupply().add(USDsAmt).add(swapFeeAmount);
-        USDsSupplyIncrementTotal = USDsSupplyIncrementTotal.add(USDsSupplyIncrement);
-      }
-  }
-  USDsInstance.changeSupply(USDsSupplyIncrementTotal);
-
-
-}
+Working on code to fix the bug as we speak
