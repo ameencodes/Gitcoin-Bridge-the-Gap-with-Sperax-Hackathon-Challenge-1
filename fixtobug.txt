@@ -18,13 +18,16 @@ function _rebase() internal {
   uint newTokensAmt;
   uint USDsSupplyIncrement;
   uint USDsSupplyIncrementTotal;
-  address[] memory FIXStrategies = new address[];
-  for (uint y = 0; y <allStrategies.length; y++) {
-    FIXStrategies[i] = allStrategies[i];
-  }
+  address[] memory FixallCollat = new address[];
+
   for (uint y = 0; y < allCollat.length; y++) {
-    collaAddr = allCollat[y];
-    _strategyAddr = FIXStrategies;
+    FixallCollat[i]= = allCollat[i];
+  } 
+  //end of for loop for allcollat
+// start of for loop for allStrategies
+  for (uint i = 0; i <allStrategies.length; i++) {
+    collaAddr =   FixallCollat[i];
+    _strategyAddr = allStrategies[i];
       strategy = IStrategy(_strategyAddr);
       allocatedAmt = strategiesAllocatedAmt[collaAddr][_strategyAddr] ;
       (, newTokensAmt) = strategy.checkBalance(collaAddr).trySub(allocatedAmt);
