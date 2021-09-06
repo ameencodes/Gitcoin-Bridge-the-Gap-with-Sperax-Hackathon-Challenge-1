@@ -1,0 +1,46 @@
+```
+
+So the rebase() calls _rebase() on line 483.
+However, in the _rebase() 2 for loops have been implemented on line 499 and 501.
+This results in a nested for loop . The first for loop one line 499 for (uint y = 0; y < allCollat.length; y++) . 
+This loops over the length of all the collateral assets in the contract. 
+However , on line 501 a for loop is inserted in the previous for loop for (uint i = 0; i < allStrategies.length; i++) . 
+This for loop on line 501 goes through all the strategies and calculates if they’ve made a profit and withdraws from the strategies if they have made a profit . 
+However , the critical issue here is that the amount of strategies has to be equal or less than the amount collaterals in the contract .
+Say for instance allCollat.length = 5 and allStrategies.length= 7 .
+This means that once is on 5th index a‘ allCollat[4;]’ the for loop ends and therefore the rest of the strategies will not be computed .
+
+Fix to Bug
+```
+
+function _rebase() internal {
+  address _strategyAddr;
+  IStrategy strategy;
+  address collaAddr;
+  uint allocatedAmt;
+  uint newTokensAmt;
+  uint USDsSupplyIncrement;
+  uint USDsSupplyIncrementTotal;
+  address[] memory FIXStrategies = new address[];
+  for (uint y = 0; y <allStrategies.length; y++) {
+    FIXStrategies[i] = allStrategies[i];
+  }
+  for (uint y = 0; y < allCollat.length; y++) {
+    collaAddr = allCollat[y];
+    _strategyAddr = FIXStrategies;
+      strategy = IStrategy(_strategyAddr);
+      allocatedAmt = strategiesAllocatedAmt[collaAddr][_strategyAddr] ;
+      (, newTokensAmt) = strategy.checkBalance(collaAddr).trySub(allocatedAmt);
+      if (newTokensAmt > 0) {
+        strategy.withdraw(address(this), collaAddr, newTokensAmt);
+        (uint SPABurnAmt, uint collaDepAmt, uint USDsAmt, uint swapFeeAmount) = mintView(collaAddr, newTokensAmt, 2);
+        strategy.withdraw(address(this), collaAddr, collaDepAmt);
+        ISperaxToken(SPATokenAddr).burnFrom(SPAValut, SPABurnAmt);
+        USDsSupplyIncrement = USDsInstance._totalSupply().add(USDsAmt).add(swapFeeAmount);
+        USDsSupplyIncrementTotal = USDsSupplyIncrementTotal.add(USDsSupplyIncrement);
+      }
+  }
+  USDsInstance.changeSupply(USDsSupplyIncrementTotal);
+
+
+}
